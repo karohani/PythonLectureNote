@@ -1,0 +1,217 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+
+
+* Input Ouput
+
+** Summary
+
+   
+   #+CAPTION: formatting
+   #+ATTR_HTML: :border 2 :rules all :frame border
+   #+ATTR_LaTeX: :align |c|c|c| 
+
+| Definition             | Use Example             |
+| ---------------------- | ----------------------- |
+| string.format()        |                         |
+                                
+
+
+** format(): 포맷을 위한 문자열 메서드 
+
+*** 사용방법 
+    #+BEGIN_SRC python
+    #str.format의 사용법
+    print("Hello, {}".format("Python World"))
+    print("Hello, {}, {}".format("Python World", "Step1"))
+    print("Hello, {0},{1},{2}".format("Python World", "Step", 1))
+    #+END_SRC
+
+** 포맷 예제
+
+*** Unpacking 
+
+    #+BEGIN_SRC python
+    # Unpacking
+
+    ##tuple
+    a="{0}-{1}-{2}".format(*"ABCDEFG")
+    print(a)
+    
+    b=tuple("ABC")
+    print(b)
+    a="{}-{}-{}".format(*b)
+    print(a)
+    
+    ## Tricky
+    a="{}-{}-{}".format(*"ABCDE")
+    print(a)
+    
+    
+    
+    ##list
+    
+    print("list")
+    text="ABCD"
+    b=list(text)
+    a="{}-{}-{}".format(*b)
+    print(a)
+    
+    ## Dictionary
+    
+    a="{0[name]}, {0[family-name]}".format({"name":"python", "family-name":"lee"})
+    print(a)
+    
+    
+    ##다음과 같이 쓰지 못한다. 
+    #a="{[name]}, {[family-name]}".format({"name":"python", "family-name":"lee"})
+    #print(a)
+    
+    #+END_SRC
+
+*** align
+- {:>20}, {:.>20}, {>:^20} .......
+
+#+BEGIN_SRC python
+#align
+print("============sorting=========")
+print("{:<20}".format("left assing"))
+print("{:>20}".format("right assign:"))
+print("{:^20}".format("centering"))
+
+##빈 공간 채우기
+
+print("{:.<20}".format("left assing"))
+print("{:.>20}".format("right assign:"))
+print("{:.^20}".format("centering"))
+#+END_SRC    
+
+*** math format
+
+
+    #+CAPTION: format
+    #+ATTR_HTML: :border 2 :rules all :frame border
+    #+ATTR_LaTeX: :align |c|c|c|
+| kind       |         |              |
+| binary (b) | char(c) | demical(d,n) |
+| octet(o)   |  16x(x) |       16x(X) |
+|            |         |              |
+
+
+#+BEGIN_SRC python
+import math
+print("radius is {:f}".format(math.pi))
+print("radius is {:.2f}".format(math.pi))
+print("radius is {:3.2f}".format(math.pi))
+print("radius is {:+f}".format(-math.pi))
+print("radius is {:+.1f}".format(math.pi))
+ 
+#+END_SRC
+
+- 진법 표현은 다음과 같이 한다. 
+#+BEGIN_SRC python
+##진법을 표현해보자
+print("Integer:{0:d}, Hexa:{0:x}, Octal:{0:o}, Binary:{0:b}".format(50))
+## 8, 16진수는 접두사가 있으므로 표시할 수 있다.
+print("Integer:{0:d}, Hexa:{0:x}, Octal:{0:#o}, Binary:{0:#b}".format(50))
+
+#==result===
+Integer:50, Hexa:32, Octal:62, Binary:110010
+Integer:50, Hexa:32, Octal:0o62, Binary:0b110010
+#+END_SRC
+
+- auto Formatting
+#+BEGIN_SRC python
+print("{:,}".format(12345))
+print("{:%}".format(2/5))
+print("{:.2%}".format(2/5))
+#+END_SRC
+
+** Logging의 이해 
+- Python Logging Library
+- [[https://docs.python.org/3/library/logging.html][16.6. logging — Logging facility for Python — Python 3.5.2 documentation]]
+   SW실행시에 일어나는 이벤트를 추적하고 관리하기 위한 문서를 의미한다. 로깅의 레벨은 다음과 같다. 
+   1. DEBUG
+   2. INOF
+   3. WARNNING
+   4. ERROR
+   5. CRITICAL
+  
+** Logging의 활용법
+
+
+*** 사용 예제
+
+#+BEGIN_SRC python
+import logging
+
+
+logging.warning("Warning")
+logging.info("INFOMATION")
+
+
+
+# 콘솔 출력용 핸들러 생성
+
+handler=logging.StreamHandler()
+
+#Format 생성
+formatter=logging.Formatter("%(asctime)s- %(name)s- %(levelname)s - %(message)s ")
+
+# 핸들러에 포맷터 설정
+logger= logging.getLogger(__name__)
+print("__name__: {}",__name__)
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+
+# Log Message 출력
+
+logger.debug(" This is Debug ")
+logger.info(" This is working")
+logger.warn("some problem")
+logger.error("error, this is not working")
+logger.critical("critical error")
+
+#+END_SRC
+
+
+*** Logging Format
+
+| Attribute       | How To Call         | Description                      |
+| asctime         | %(asctime)s         | 로그 레코드 생성시간             |
+| filename        | %(filename)s        | 소스 코드가 작성된 파일이름      |
+| funcname        | %(funcName)s        | Logging을 호출한 함수이름        |
+| levelname       | %(levelname)s       | 로그레벨                         |
+| lineno          | %(lineno)d          | 소스 코드 줄 위치                |
+| module          | %(module)s          | 모듈이름(확장자 미포함)          |
+| message         | %(message)s         | 로깅메시지                       |
+| name            | %(name)s            | 로거 이름                        |
+| pathname        | %(pathname)s        | 소스 코드가 작성된 파일 전체경로 |
+| process         | %(process)d         | Process ID(사용가능 하다면)      |
+| processName     | %(processName)s     | Process name                     |
+| relativeCreated | %(relativeCreated)d | Logger Record                    |
+| stack_info      |                     |                                  |
+| thread          | %(thread)d          | Thread ID                        |
+| threadName      | %(theadName)s       |                                  |
+** 로깅 사용하기 
+  
+*** TODO 설정파일을 이용해서 logging 이용하기 
+
+
+추가
+여기 파일을 추가하면?
+
+
+Python

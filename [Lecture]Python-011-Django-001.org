@@ -1,0 +1,61 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+
+* Python-011-django-001
+
+필터를 추가 해보자 
+
+
+
+** 기본으로 지정된 index페이지를 수정한다. 
+
+/Users/nk/.pyenv/versions/3.5.2/lib/python3.5/site-packages/django/contrib/admin/templates/admin/base_site.html
+
+파일을 가져와서 복사한다.그리고 다음과 같이 폴더 트리를 만들어 준다. 
+
+#+CAPTION: folder tree
+#+ATTR_HTML: width "100px"
+#+ATTR_ORG: width 100
+[[/Users/nk/Dropbox/App/001-ORGMODE/Image/2016-12-29148.png]]
+
+
+
+*** setting.py 수정
+    DIRS 입력
+    #+BEGIN_SRC python
+    TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': ['Lecture011_Django/templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+    #+END_SRC
+
+
+
+    Main Page의 이름이 바뀐것을 알 수 있다. 
+
+
+
+    

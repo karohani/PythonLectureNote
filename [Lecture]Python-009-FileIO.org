@@ -1,0 +1,208 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+
+* Python File IO
+
+
+
+
+** File MODE
+
+| MODE | Description                 |
+| r    | read mode                   |
+| w    | write mode                  |
+| x    | exclusive creation          |
+| a    | appending(end line writing) |
+| b    | binary mode                 |
+| t    | text mode(default)          |
+| +    | reading and writting        |
+
+
+
+** file open, flush , close 
+
+
+#+BEGIN_SRC python
+
+
+f=open("Prog.txt", "w")
+f.write("HELLO PYTHON WORLD \n")
+
+message="name : "+ "LEE" + "Age : " + "22"
+f.write(message)
+
+f.flush()
+print("is FileDescriptor Closed?", str(f.close()))
+
+
+#+END_SRC
+
+** read function
+
+#+BEGIN_SRC python
+file.txt
+1번째 라인입니다. 
+2번째 라인입니다.
+3번째 라인입니다.
+#+END_SRC
+f=open("file.txt", "r")
+f.method()
+
+| method                  | description                     |
+| readline()              | read until \n                   |
+| readlines()             | return list["~~~\n", "~~~~~\n"] |
+| read()                  | [~~~~EOF]                       |
+| seek(offset, from what) |                                 |
+| tell()                  |                                 |
+|                         |                                 |
+
+
+** tell, seek
+
+#+BEGIN_SRC python
+# File Iterator 돌리기
+##read_file.seek(0,0) # seek(offset, from_what)
+read_file=open("Prog.txt", "r")
+for line in read_file:
+    print(line, end="")
+## iterator의 현재 위치
+read_file.tell()
+print("tell() : ", read_file.tell())
+read_file.seek(0.0)
+print("seek(0,0)-> tell(): ", read_file.tell())
+for line in read_file:
+    print(line, end="")
+
+
+read_file.close()
+
+## result ##
+HELLO PYTHON WORLD 
+name : LEE, Age : 22
+tell() :  40
+seek(0,0)-> tell():  0
+#+END_SRC
+
+
+** Notice, 
+
+#+BEGIN_SRC python
+# read file
+
+read_file=open("Prog.txt", "rt")
+print(read_file.readline())
+print(read_file.readline())
+read_file.close()
+
+
+# read file Problem
+print("read file Problem")
+read_file=open("Prog.txt", "rt")
+## this is iterator
+for line in read_file:
+    print(line)
+## result ##
+HELLO PYTHON WORLD 
+
+
+# read file Problem2
+print("read file Problem")
+read_file=open("Prog.txt", "rt")
+## this is iterator
+for line in read_file:
+    print(line, end="")
+
+
+# result ##
+HELLO PYTHON WORLD 
+name : LEEAge : 22
+
+#+END_SRC
+
+
+
+
+
+** File_OBJECT TO LIST
+
+#+BEGIN_SRC python
+# list로 형변환을 하면 \n 을 하나의 덩어리로 본다
+
+read_file=open("Prog.txt", "r")
+
+read_list=list(read_file)
+print(read_list)
+
+read_file.close()
+#+END_SRC
+
+
+
+
+** with open() as f:
+  
+
+#+BEGIN_SRC python
+#withopen.py
+
+with open("Prog.txt", "r") as f:
+    file_list=list(f)
+
+## with 가 종료되면 f.close()가 자동으로 실행된다
+
+print("file_list[0] :", file_list[0])
+print("file_list[1] :", file_list[1])
+
+##result###
+file_list[0] : HELLO PYTHON WORLD 
+
+file_list[1] : name : LEE, Age : 22 
+
+#+END_SRC
+
+
+
+** Json Serialization
+
+
+   #+BEGIN_SRC python
+   import json
+
+# Java Script Object Notation
+
+my_info={"name":"tommy", "job":"Programmer", "language":["JAVA", "C", "C++", "JSP", "PYTHON"]}
+
+## Serializatoion
+
+
+serialization=json.dumps(my_info)
+print("dump() : {}, type() : {}".format(serialization, type(serialization)))
+
+## 객체 쓰기 dump(obj, fp)
+with open("JSON.txt", "w") as f:
+    json.dump(my_info, f)
+
+## reverse serialized data ----> dictionary
+
+with open("JSON.txt", "r") as f:
+    rsr_data=json.load(f)
+
+print("rsr_data= {}, type(): {}",rsr_data, type(rsr_data))
+
+   #============result==============#
+/Library/Frameworks/Python.framework/Versions/3.5/bin/python3.5 /Users/nk/003-PythonWorkSpace/Lecture/Lecture009_FileIO/JSONSerialization.py
+dump() : {"job": "Programmer", "language": ["JAVA", "C", "C++", "JSP", "PYTHON"], "name": "tommy"}, type() : <class 'str'>
+rsr_data= {}, type(): {} {'job': 'Programmer', 'language': ['JAVA', 'C', 'C++', 'JSP', 'PYTHON'], 'name': 'tommy'} <class 'dict'>
+   #+END_SRC

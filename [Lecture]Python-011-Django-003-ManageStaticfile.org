@@ -1,0 +1,52 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+
+
+
+* Manage Static Files
+
+
+  이미지나 javascript, 파일을 사용해서 서비스를 하기 위해서는 Django에서 제공하는 django.contrib.staticfile을 사용해서 설정해주어야 한다. 
+** 구조
+
+
+** Configuring static file
+
+**** TODO django.contrib.staticfiles를 Installed_APP에서 import해준다. 
+
+     #+BEGIN_SRC shell
+     STATIC_URL = '/static/'
+     #+END_SRC 
+
+     template에서 url을 다음과 같이 작성한다면, 다음과 같은 결과를 얻을 수 있다.
+
+     #+BEGIN_SRC html 
+     {% load static %}
+     <img src=" { %static "my_app/example.jpg" %} alt ="MY image">
+
+     ##########     
+     <img src="static/my_app_example" alt ="MY image">
+     #+END_SRC
+     여기서 {% static %}은 static template tag라고 부르며 URL을 생성하는데, 이는 "STATICFILES_STORAGE"에 정의되어 있다. django.contrib.staticfiles.storage.StaticFilesStorage에는 static file을 "$manage.py collectstatic"명령을 통해서 모을 수 있도록 method가 만들어져 있다. 기본적으로 바로 사용할 수 있는 storage는 아래에 다음과 같이 정의 되어 있다 
+
+     #+BEGIN_SRC python 
+     #django.contrib.staticfiles.storage.staticfiles_storage
+     
+     #+END_SRC
+     
+
+   
+
+     otlb    

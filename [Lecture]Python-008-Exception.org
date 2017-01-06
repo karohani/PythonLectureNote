@@ -1,0 +1,28 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+
+
+* Exeption Handling
+
+#+BEGIN_SRC python
+
+def exceptino_text():
+    try:
+         print("[2]Try", 2+"3")
+     except TypeError as error:
+         print("[2] Type Error : {}".format(err)) # error message
+         traceback.print_exe() ## notice spelling
+
+#+END_SRC

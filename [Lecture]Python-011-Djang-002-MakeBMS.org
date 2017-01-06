@@ -1,0 +1,299 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+
+
+* TODO Django로 도서 관리 프로그램을 만들어보자
+
+
+** 설계
+
+
+*** UI 설계
+
+*** 도서정보를 담는데 필요한 테이블 
+  
+**** Book Talbe
+     - 제목
+     - 저자 : 다양하게 필요하다.
+     - 출판사 :
+     - 상세 정보
+     
+     | column name      | type         | constraint | description |
+     | id               |              |            |             |
+     | title            | varchar(100) |            |             |
+     | authors          | integer      |            |             |
+     | publisher        | integer      |            |             |
+     | publication_date | date         |            |             |
+     
+**** Author table 
+
+     | column name | type        | constraint   | description |
+     | id          | integer     | Not null, pk | primarykey  |
+     | saluation   | char(100    | not null     |             |
+     | name        | varchar(50) | notnull      | name        |
+     | email       | email       | not null     |             |
+
+**** publisher talbe
+
+     | column name | type        | constraint | description |
+     | id          | integer     | notnull pk |             |
+     | name        | varchar(50) | notnull    |             |
+     | address     | varchar(50) | notnull    |             |
+     | website     | url         | notnull    |             |
+     |             |             |            |             |
+
+*** View 흐름도
+
+    | URL           | view                      | template         |
+    | /books/       | BooksModel(view.as.view() | index.html       |
+    | /books/book   | BookList.as_view()        | book_list.html   |
+    | /books/book/3 | BookDetail.as_view()      | Book_detail.html |
+    |               |                           |                  |
+
+
+** 작업 순서 
+
+*** 환경 설정
+    - manage.py startapp books
+    - setting.py
+    - model.py
+    - admin.py
+    - makemigrations
+    - migrate
+    - runserver
+
+*** {project_name}/setting.py
+    INSTALLED_APP에 'books.apps.BooksConfig'을 추가 해준다. 
+
+    #+BEGIN_SRC python
+    INSTALLED_APPS = [
+   'books.apps.BooksConfig',
+   ................
+   ]
+    #+END_SRC
+     
+*** books/model.py
+
+
+     #+BEGIN_SRC python
+     from django.db import models
+
+# Create your models here.
+
+##id, title, authors, publisher, publication_date
+class Book(models.Model):
+    title=models.CharField(max_length=200)
+    authors=models.ManyToManyField("Author")
+    publisher=models.ForeignKey("Publisher")
+    publication_date=models.DateField()
+
+    def __str__(self): #객체를 출력할 때 표시되는 부분을 정의
+        return self.title
+
+
+class Author(models.Model):
+    name = models.CharField(max_length=100)
+    profile=models.CharField(max_length=200); #인사말
+    email=models.EmailField()
+
+    def __str__(self):
+        return self.name
+
+## 출판사
+## 출판사 : 이름, 주소, 웹사이트
+class Publisher(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=200)
+    website=models.URLField()
+
+    def __str__(self):
+        return self.name
+     #+END_SRC
+
+*** {project}/books 구조 
+
+     #+BEGIN_SRC shell
+.
+├── __init__.py
+├── __pycache__
+│   ├── __init__.cpython-35.pyc
+│   ├── admin.cpython-35.pyc
+│   ├── apps.cpython-35.pyc
+│   ├── models.cpython-35.pyc
+│   ├── urls.cpython-35.pyc
+│   └── views.cpython-35.pyc
+├── admin.py
+├── apps.py
+├── migrations
+│   ├── 0001_initial.py
+│   ├── __init__.py
+│   └── __pycache__
+│       ├── 0001_initial.cpython-35.pyc
+│       └── __init__.cpython-35.pyc
+├── models.py
+├── templates
+│   └── books
+│       └── index.html
+├── tests.py
+├── urls.py
+└── views.py
+
+5 directories, 18 files
+
+     
+     #+END_SRC
+
+*** {project}/url.py
+
+    #+BEGIN_SRC python
+   urlpatterns = [
+   ........
+   url(r'^books/', include('books.urls')),
+   ...........
+   ]
+    #+END_SRC
+
+*** {project}/books/urls.py
+
+     #+BEGIN_SRC python
+     # file name : books/urls.py
+
+from django.conf.urls import url
+from . import views
+
+app_name = "books"
+# URLconf 코딩 한다. - 정규식을 이용
+urlpatterns = [
+    # 127.0.0.1:8888/books/  , index.html
+    url(r'^$', views.BooksModelView.as_view(), name='index'),
+
+    # 127.0.0.1:8888/books/book/
+    url(r'^book/$', views.BookList.as_view(), name='book_list'),
+    url(r'^author/$', views.AuthorList.as_view(), name='author_list'),
+    url(r'^publisher/$', views.PublisherList.as_view(), name='publisher_list'),
+
+    url(r'^book/(?P<pk>\d+)/$', views.BookDetailList.as_view(), name='book_detail'),
+    url(r'^author/(?P<pk>\d+)/$', views.AuthorDetailList.as_view(), name='author_detail'),
+    url(r'^publisher/(?P<pk>\d+)/$', views.PublisherDetailList.as_view(), name='publisher_detail'),
+
+]     
+     #+END_SRC
+
+
+     
+*** {project}/books/views.py
+
+     #+BEGIN_SRC python
+     
+# file name : ch03/books/views.py
+
+from django.shortcuts import render, get_object_or_404
+from books.models import Book, Author, Publisher
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
+from django.views import generic
+# Create your views here.
+# ch03/templates/polls/index.html 에서 latest_question_list를 이용했다.
+# 그 latest_question_list를 만들기
+
+
+
+class BooksModelView(generic.TemplateView):
+    template_name="books/index.html"
+
+    def get_context_data(self, **kwargs):
+        context=super(BooksModelView, self).get_context_data(**kwargs)
+        context['object_list']=['Book','Author', 'Publisher']
+        return context
+
+
+#List
+class BookList(generic.ListView):
+    model=Book
+
+class AuthorList(generic.ListView):
+    model=Author
+
+class PublisherList(generic.ListView):
+    model=Publisher
+
+class BookDetailList(generic.DetailView):
+    model=Book
+
+
+class AuthorDetailList(generic.DetailView):
+    model = Author
+
+
+class PublisherDetailList(generic.DetailView):
+    model = Publisher
+
+     #+END_SRC
+
+*** /books/Templates/books/index.html
+
+     링크를 포함 할 수 있도록 코드를 한다. 
+    #+BEGIN_SRC html
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>도서관리 프로그램 </title>
+</head>
+<body>
+    <h1>Books Management System</h1>
+    <ul>{% for modelname in object_list %}
+            {% with "books:"|add:modelname|lower|add:"_list" as urlvar %}
+
+            <li><a href="{% url urlvar  %}">{{modelname|add:"_list"}}</a></li>
+            {% endwith %}
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
+    #+END_SRC
+ 
+*** /books/Templates/books/book_list.html , author_list.html, publisher_list.html을 만들어서 다음과 같이 작성한다. 
+
+     #+BEGIN_SRC html
+     <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>책 목록 보기</title>
+</head>
+<body>
+    book_list.html<br>
+
+    <h1>Book List</h1>
+    <ul>
+    {% for book in object_list %}
+        <li>{{ book.title }}</li>
+    {% endfor %}
+    </ul>
+
+
+</body>
+</html>
+     #+END_SRC
+
+
+
+
+
+
+
+

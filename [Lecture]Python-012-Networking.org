@@ -1,0 +1,184 @@
+
+
+
+* Python Networking
+
+
+
+
+** UDP
+
+*** SERVER
+    #+BEGIN_SRC python
+    # USER DATAGRAM PROTOCOL
+
+from socket import *
+
+PORT = 10000
+
+def main():
+    server=socket(AF_INET, SOCK_DGRAM)
+    server.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1) # 혹시라도 소켓이 쓰레드 문제로 정산 반환 되어 있지 않을때 다시 쓴다는 명령어
+    server.bind(("127.0.0.1", PORT))
+    print("Listenning.........")
+    while True:
+        s, addr=server.recvfrom(1024)
+        print(s)
+        print(addr)
+        server.sendto("welcome".encode(), addr)
+        if not s:
+            s.close()
+
+
+if __name__=="__main__":
+    main()
+
+
+
+
+    #+END_SRC
+
+*** Client
+
+    #+BEGIN_SRC python
+    
+
+from socket import *
+
+PORT = 10000
+
+
+def main():
+    client = socket(AF_INET, SOCK_DGRAM)
+    client.sendto("hello".encode(), ("127.0.0.1", PORT))
+    s, addr= client.recvfrom(1024)  ## recvfrom : (bytes, address)
+    # https://docs.python.org/3.5/library/socket.html#socket.socket.recvfrom
+
+    print(s)
+
+
+main()
+
+if __name__=="__main__":
+    main()
+
+
+
+    
+    #+END_SRC
+
+#+BEGIN_SRC python
+/Users/nk/.pyenv/versions/anaconda3-4.1.1/bin/python /Users/nk/003-PythonWorkSpace/Lecture/Lecture012_Socket/udp_client.py
+b'welcome'
+b'welcome'
+#+END_SRC
+
+
+위의 결과를 보면 string을 출력했는데 
+#+BEGIN_SRC python
+my_string=b'The string'
+#+END_SRC
+의 형태가 출력 되었다. 여기서 b는 byte string을 의미한다. 
+
+
+** TCP (Transfer controll protocol)
+
+   connection Oriented 이후에 데이터를 송수신
+
+
+
+
+** Structure
+
+Struct Unpacking
+| format | Ctype          | python Type      | standard size |
+| x      | pad byte       | no value         |               |
+| c      | char           | bytes of length1 |             1 |
+| b      | signed char    | integer          |             1 |
+| B      | unsigned char  | integer          |             1 |
+| ?      | _BOOL          | bool             |             1 |
+| h      | short          | integer          |             2 |
+| H      | unsigned short | integer          |             2 |
+| i      | integer        | integer          |             4 |
+| I      | unsigned int   | int              |             4 |
+| l      | long           | integer          |             4 |
+| L      | unsigned long  | integer          |             4 |
+| q      | long long      | integer          |             8 |
+| Q      |                | interger         |             8 |
+| n      | ssize_t        | integer          |               |
+| N      | size_t         | integer          |               |
+| f      | float          | float            |             4 |
+| d      | double         | float            |             8 |
+| s      | char[]         | bytes            |               |
+| p      | char[]         | bytes            |               |
+| P      | void *         | integer          |               |
+
+
+*** server
+ #+BEGIN_SRC python
+ # file name udp_struct_server
+
+
+ import socket
+ import struct
+
+
+ UDP_IP="127.0.0.1"
+ UDP_PORT=5008
+
+ IP="127.0.0.1"
+ PORT= 15000
+
+ sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+ sock.bind((UDP_IP, UDP_PORT))
+
+ while True:
+     data, addr=sock.recvfrom(1024)
+     print("\n Byte Length of Message) : ", len(data), "\n")
+     print("addr=", addr)
+     print("addr[0]=", addr[0], "addr[1] : ", len(data), "\n")
+     print("addr=", addr)
+     print("addr[0]=", addr[0], "addr[1]=", addr[1])
+     print("Message Data : ", struct.unpack("iff5s", data), "\n") # integer, float *2, string*5
+
+
+ sock.close()
+
+ print("END....")
+
+
+ #+END_SRC
+
+*** UDP client
+e #+BEGIN_SRC python
+ # file_name : udp_struct_client.py
+
+ import socket
+ import struct
+
+
+ UDP_IP="127.0.0.1"
+ UDP_PORT=5008
+
+ data=b"" # byte
+
+ data+=struct.pack('i',5)
+ data+=struct.pack('f',54.0)
+ data+=struct.pack('f',3.2)
+ msg=b"hello"
+ data+=struct.pack('5s',msg)
+
+ sock=socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+ sock.sendto(data,(UDP_IP, UDP_PORT))
+
+ print("len =", len(data))
+ print("data=", data)
+ #+END_SRC
+
+*** result
+ #+BEGIN_SRC python
+ #result#
+ addr= ('127.0.0.1', 58800)
+ addr[0]= 127.0.0.1 addr[1]= 58800
+ Message Data :  (5, 54.0, 3.200000047683716, b'hello')
+ #+END_SRC
