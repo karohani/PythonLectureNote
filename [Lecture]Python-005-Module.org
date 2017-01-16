@@ -1,0 +1,97 @@
+
+
+* Import Module
+
+
+** built in function
+
+*** EX #1 
+ #+BEGIN_SRC python
+ import math
+ print(math.pi)
+
+ #result===========
+
+ python ImportModule.py
+ 3.141592653589793
+
+ #+END_SRC
+
+
+
+** 정의 및 불러오기 
+
+
+** dir()함수를 통해서 모듈 속 들여다 보기 
+
+*** EX #2 
+
+#+BEGIN_SRC python
+
+import math 
+print(dir(math))
+
+
+# result =========
+['__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__',
+ 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'ceil', 'copysign', 
+'cos', 'cosh', 'degrees', 'e', 'erf', 'erfc', 'exp', 'expm1', 'fabs', 'factorial', 
+'floor', 'fmod', 'frexp', 'fsum', 'gamma', 'gcd', 'hypot', 'inf', 'isclose', 
+'isfinite', 'isinf', 'isnan', 'ldexp', 'lgamma', 'log', 'log10', 'log1p', 
+'log2', 'modf', 'nan', 'pi', 'pow', 'radians', 'sin', 'sinh', 'sqrt', 'tan',
+ 'tanh', 'trunc']
+
+#+END_SRC
+
+** Package 개념 설명
+
+** sys.argv[1] 사용해서 terminal에서 바로 실행하기 
+
+
+*** "__name__" 
+
+#+BEGIN_SRC python
+if __name__=="__main__":
+    import sys
+    fib(int(sys.argv[1]))
+
+
+def fib(n):
+    a,b=0,1
+    while b<n:
+        print(b, end=' ')
+        a,b=b, a+b
+
+    print()
+#+END_SRC
+
+
+
+** import
+
+***  기본적인 사용법
+ - import folder.module(.py) 
+ - from folder.module(.py) import function (바로 함수 사용가능)
+
+
+ #+BEGIN_SRC python
+ #4 import 1function
+
+ from module.module_name import call
+ call() 
+
+ import module.module_name
+ module.module_name.allcall()
+
+ import module.module_name as module
+ module.allcall()
+
+ #result========
+ this is module
+ this is all of module
+ this is all of module
+ #+END_SRC
+
+*** TODO 상위폴더에 있는 모듈을 불러 올때 
+
+ 

@@ -28,9 +28,8 @@
 | string.format()        |                         |
                                 
 
-
 ** format(): 포맷을 위한 문자열 메서드 
-
+   
 *** 사용방법 
     #+BEGIN_SRC python
     #str.format의 사용법
@@ -40,9 +39,9 @@
     #+END_SRC
 
 ** 포맷 예제
-
+   
 *** Unpacking 
-
+    
     #+BEGIN_SRC python
     # Unpacking
 
@@ -215,3 +214,6 @@ logger.critical("critical error")
 
 
 Python
+
+
+* File

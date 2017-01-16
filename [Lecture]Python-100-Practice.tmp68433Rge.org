@@ -1,0 +1,71 @@
+# Created 2017-01-09 Mon 21:29
+#+TITLE: 이것은 타이틀입니다.
+#+AUTHOR: 이인영
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+#+LATEX_HEADER: \usepackage{longtable}
+
+
+* SqlLite를 이용해서 현재 디렉토리의 파일의 이름을 저장하는 스크립트를 작성하라.
+
+** 조건
+
+
+#+CAPTION: table
+| Name      | Type    |
+| filename  | varchar |
+| Pwd       | varchar |
+| file-size | integer |
+| file-hash | varchar |
+
+
+* File다루기
+
+** DONE python manage-file.py path
+path를 입력하면 그 패스의 모든 파일의 이름을 가져오는 프로그램을 작성하라
+
+
+
+#+BEGIN_SRC python
+  #!/usr/bin/env python
+  # -*- coding :utf-8 -*-
+  
+  """
+  system의 기본 인코딩을 확인하자
+  """
+  import sys
+  print(sys.getdefaultencoding())
+  import os
+  def get_filePaths(directory):
+      """
+  
+      """
+      file_paths=[]
+      for root, directories, files in os.walk(directory):
+          for filename in files:
+              filepath=os.path.join(root,filename)
+              file_paths.append(filepath)
+  
+      return file_paths
+  
+  full_file_Paths=get_filePaths("/Users/nk/002-CWorkspace")
+  
+  
+  if 0 :
+      for name in full_file_Paths:
+          tmp_name=name.encode('utf-8')
+          print(tmp_name)
+  
+  
+  
+  with open("file.txt", "w", encoding="utf-8") as f:
+      for name in full_file_Paths:
+          f.write(name)
+          f.write("\n")
+#+END_SRC

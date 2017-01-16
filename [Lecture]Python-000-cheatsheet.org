@@ -1,0 +1,12 @@
+
+
+
+* DataType
+
+** List
+   [A,B,C,D]
+
+   #+BEGIN_SRC python
+   ex = [ str(n) for n in range(1,11)]
+   ex2= list("ABCD")
+   #+END_SRC

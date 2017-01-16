@@ -1,0 +1,158 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+#+TITLE: PYTHON
+
+
+* Basic 
+
+  Python의 모든 기본 자료형은 객체이다. 
+
+  - DataType
+    - Numeric Type
+    - String Type 
+  - class and object
+  - Logical operator
+    - <, <=, >, >=, ==, !=, is , is not
+
+
+   
+
+** summary
+
+ 
+   #+CAPTION: Data Type Definition
+   #+ATTR_HTML: :border 2 :rules all :frame border
+   #+ATTR_LaTeX: :align |c|c|c| 
+
+| Type       | Definition       | Description              |
+| int        |                  |                          |
+| double     |                  |                          |
+| float      |                  |                          |
+| string     | " " , ' '        |                          |
+| List       | [value,  ]       | can nested               |
+| Tuple      | ( value,)        | Immutable                |
+| Dictionary | { key: value , } | can nested               |
+| set        | {value, value}   | can't Duplicated Element |
+** 특징
+   파이썬은 모든 자료형이 Object이다. 
+** 기본 사항
+*** 예약어(reserved word)
+
+| False   | class    | finally | is       | return |
+| NONE    | continue | for     | lambda   | try    |
+| True    | def      | from    | nonlocal | while  |
+| and     | del      | global  | not      | with   |
+| as elif | if       | or      | yield    | with   |
+| assert  | else     | import  | pass     |        |
+| except  | in       | raise   |          | break  |
+
+*** coment
+    "#"으로 구분한다. 
+
+*** block은 indentation으로 구분한다. (4 space)
+
+*** String type
+    - 문자열은 (') 작은 따옴표로 감싼다.
+    - 문자열 '는  \'역 슬래쉬 따옴표를 이용한다.
+    - len은 문자의 개수를 의미한다 (byte가 아니다!)
+
+*** Type Casting
+    
+*** Mutable vs Immutable
+
+    - [[https://ko.wikipedia.org/wiki/%EB%B6%88%EB%B3%80%EA%B0%9D%EC%B2%B4][불변객체 - 위키백과, 우리 모두의 백과사전]]
+
+    보통 생성후에 예를들어 객체와 같은 것들을 생성후에 그 내용의 값을 변경할 수 있는가 없는가에 대한 문제이다. Immutable object를 복제할 때 이 값은 object전체가 복사 되지 않고 reference만 복제 된다. 
+
+#+BEGIN_SRC python
+#id는 메모리의 주소를 나타내는 함수이다.
+>>> hello="hi"
+>>> hello
+'hi'
+>>> id(hello)
+4302758048
+>>> hello = "rere"
+>>> id(hello)
+4303145368
+>>>
+#+END_SRC
+위의 값을 보면 hello라는 변수에 대해서 안의 값이 바뀌면 주소가 바뀌는 것을 알 수 있다. 즉 여기에서 문자열은 immutable이다. 이 const는 컴파일과정에서 검증할 수 있는 것이며, (실제로 완전히 못쓴다는 말이 아니다) 컴파일 상에서 Immutable object가 변경되었는지 아닌지 확인한다. Immutable Object는 다수의 쓰레드에서 동시에 접근 했을 때 데이터가 변경될 우려가 없으므로 Thread safe라고 한다. 이 과정에서 Mutual Exclusion을 할 필요가 없게 된다. 
+
+Python에서는 String Object는 Immutable Object로 정의된다. 
+
+
+
+#+CAPTION: python Data 구분
+#+ATTR_HTML: :border 2 :rules all :frame border
+#+ATTR_LaTeX: :align |c|c|c|
+| Immutable Data Type          | Mutable Data Type |
+| number : int, float, complex | list              |
+| string                       | dictionary        |
+| tuple                        | set               |
+| frozenset                    | bytearry          |
+| bytes                        |                   |
+|                              |                   |
+** DataType
+*** TODO summary 
+
+    #+CAPTION: Data Type & definition
+    #+ATTR_HTML: :border 2 :rules all :frame border
+    #+ATTR_LaTeX: :align |c|c|c|
+ list                          | [ ]          |
+| tuple                         | ( )          |
+| set                           | { }          |
+| dictionary(associative array) | {key:value } |
+|                               |              |
+
+*** ListType
+
+**** 예제코드 
+
+#+BEGIN_SRC python
+lottos=[20, 10, 30, 40]
+>>lottos
+lottos[-2]
+lottos[5]
+len(lottos)
+#+END_SRC
+
+**** List형 데이터 변경 
+| Function name | Description |
+| append()      |             |
+| len()         |             |
+| pop()         |             |
+| [a:b]         |             |
+
+*** tuple 
+- [[https://ko.wikipedia.org/wiki/%ED%8A%9C%ED%94%8C][튜플 - 위키백과, 우리 모두의 백과사전]]
+    변할 수 없는 (Immputable)한 리스트
+    - movie=(1,2,3)
+    - movive=([1,2,3], [plus, alpha, omega])
+      - 안의 내용물은 수정할 수 있다.
+
+*** Set 
+
+    - index에 의한 순서 없음. 
+    - 중복을 허용하지 않는다.
+
+*** dictionary
+    - Associative Array
+    - index로 key를 사용한다.
+    - "key" in dictionary
+
+
+
+      
+

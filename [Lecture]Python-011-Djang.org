@@ -7,11 +7,18 @@
 
 ** 환경설정 
 
+*** Django설치
+    #+BEGIN_SRC shell
+    pip install --upgrade pip
+    pip install django
+    #+END_SRC
 
-   #+BEGIN_SRC shell
-   pip install --upgrade pip
-   pip install django
-   #+END_SRC
+   
+*** SQLite3 Viewer 설치
+    http://sqlitebrowser.org
+    #+BEGIN_SRC shell
+    brew cask install sqlitebrowser
+    #+END_SRC
 
 ** project folder 생성
 

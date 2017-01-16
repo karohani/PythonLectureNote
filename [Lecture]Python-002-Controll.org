@@ -1,0 +1,42 @@
+
+#+LATEX_CLASS: article
+#+LATEX_CLASS_OPTIONS: [a4paper]
+
+#+LATEX_HEADER: \usepackage{kotex}
+#+LATEX_HEADER: \usepackage{CJKutf8}
+
+#+LATEX_HEADER: \usepackage[utf8]{inputenc}
+#+LATEX_HEADER: \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[scale=0.75,twoside,bindingoffset=5mm]{geometry}
+#+LATEX_HEADER: \usepackage[onehalfspacing]{setspace}
+
+
+
+
+* control statement
+
+** if
+*** if - elif - else 
+*** nested if
+** while
+** for
+*** for and range()
+    - 0<x<100까지 반복하기
+#+BEGIN_SRC python
+for x in range(0,100)
+#+END_SRC
+
+*** list에서 데이터 추출하기 
+
+    
+** break, continue, pass
+   반복문을 제어할 수 있는 명령이다. 
+- break : 반복문을 완전히 빠져나간다.
+- continue : 반복문의 다음 번째로 넘어간다. 
+- pass : 그대로 진행한다. indentation때문에 비워 둘수 없기 때문에 만들어 둔 예약어
+
+** 예제문제 
+
+*** 입력받은 문자열 역순으로 출력하기 (practice01.py)
+
+
